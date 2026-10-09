@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+	<title>Alkaid 瑶光</title>
+	<style>
+		.star { fill: #2563EB; }
+		.trail { stroke: #2563EB; }
+		@media (prefers-color-scheme: dark) {
+			.star { fill: #8098FF; }
+			.trail { stroke: #8098FF; }
+		}
+	</style>
+	<path class="trail" d="M3 34C11 32.5 18 29.5 25 25" fill="none" stroke-width="4.5" stroke-linecap="round" opacity="0.45"/>
+	<path class="star" d="M32 10Q35 19 44 22Q35 25 32 34Q29 25 20 22Q29 19 32 10Z"/>
+</svg>

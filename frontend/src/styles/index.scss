@@ -1,0 +1,68 @@
+@use './tokens.scss';
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+	height: 100%;
+	font-family: var(--font-family);
+	font-size: 14px;
+	color: var(--ink);
+	background: var(--page-bg);
+	// 主题切换时颜色平滑过渡
+	transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+// 滚动条
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+::-webkit-scrollbar-thumb {
+	background: var(--line);
+	border-radius: 3px;
+}
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+// 通用工具类
+.flex {
+	display: flex;
+}
+.flex-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.flex-between {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.m-b-15 {
+	margin-bottom: 15px;
+}
+.m-t-15 {
+	margin-top: 15px;
+}
+.p-15 {
+	padding: 15px;
+}
+
+// 渐变发丝线（签名元素，两主题通用）
+.grad-line {
+	height: 3px;
+	border-radius: 99px;
+	background: linear-gradient(90deg, var(--brand), var(--brand-hover), transparent);
+}

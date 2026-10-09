@@ -1,0 +1,311 @@
+// ============================================================
+// tokens.scss — 全局设计令牌（四主题）
+// 晴界 qingjie（默认浅 · Meta 风）· 玄夜 xuanye（暗 · X 风）
+// 极光 aurora（浅底深侧栏 · V1）· 曜黑 yahei（全暗琥珀 · V2）
+// 切换机制：html[data-theme='xxx']；暗色主题额外带 .dark 类
+// 所有页面禁止硬编码颜色，一律引用本文件变量
+// ============================================================
+
+/* ============================================================
+   主题一「晴界」qingjie（默认 · Meta 浅灰卡片流）
+   ============================================================ */
+:root {
+	/* ---- 品牌色 ---- */
+	--brand: #0866FF;            // Meta 蓝 · 主品牌色
+	--brand-hover: #337FFF;
+	--brand-active: #0064E0;
+	--brand-050: #E7F0FF;        // 激活底 / 淡底
+	--brand-100: #D6E5FF;
+	--accent: #06B6D4;           // 数据青 · 光轨起点（Logo 副色）
+
+	/* ---- 状态色 ---- */
+	--ok: #16A34A;
+	--ok-bg: #E9F9EF;
+	--warn: #D97706;
+	--warn-bg: #FFF7E0;
+	--danger: #C4553B;
+	--danger-bg: #FEF3F2;
+
+	/* ---- 中性层 ---- */
+	--page-bg: #F0F2F5;          // 页面底（Meta 浅灰）
+	--side-bg: #FFFFFF;          // 侧栏底
+	--card-bg: #FFFFFF;          // 卡片底
+	--header-bg: #FFFFFF;        // 顶栏底
+	--line: #CED0D4;             // 分隔线
+	--line-soft: #EFF1F4;        // 表格内行线
+	--hover-bg: #F0F2F5;         // hover 底
+
+	/* ---- 文本 ---- */
+	--ink: #050505;              // 主文本
+	--ink-mid: #65676B;          // 次文本
+	--ink-low: #8A8D91;          // 弱文本
+	--on-brand: #FFFFFF;         // 品牌色上的文本
+
+	/* ---- 氛围 ---- */
+	--banner-grad: linear-gradient(135deg, #E7F0FF 0%, #F0F6FF 45%, #EDE9FF 100%); // 门户 Banner（浅）
+	--banner-text: var(--ink);
+	--banner-sub: #5B6472;
+	--login-grad: linear-gradient(135deg, #0866FF 0%, #0064E0 50%, #5B21B6 100%);
+	--shadow-card: 0 1px 2px rgba(0, 0, 0, 0.08);
+	--shadow-card-hover: 0 6px 18px rgba(0, 0, 0, 0.12);
+	--glow: rgba(8, 102, 255, 0.35);
+
+	/* ---- 形状 / 字体 ---- */
+	--radius: 10px;
+	--font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+	--font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+	/* ==========================================================
+	   Element Plus 变量对齐（浅色）
+	   ========================================================== */
+	--el-color-primary: var(--brand);
+	--el-color-primary-light-3: #4a90ff;
+	--el-color-primary-light-5: #83b1ff;
+	--el-color-primary-light-7: #b9d1ff;
+	--el-color-primary-light-8: #d6e5ff;
+	--el-color-primary-light-9: var(--brand-050);
+	--el-color-primary-dark-2: var(--brand-active);
+	--el-bg-color: var(--card-bg);
+	--el-bg-color-page: var(--page-bg);
+	--el-bg-color-overlay: var(--card-bg);
+	--el-text-color-primary: var(--ink);
+	--el-text-color-regular: #303133;
+	--el-text-color-secondary: var(--ink-mid);
+	--el-border-color: var(--line);
+	--el-border-color-light: #E4E7ED;
+	--el-border-color-lighter: var(--line-soft);
+	--el-border-color-extra-light: #F3F5F8;
+	--el-fill-color: #F0F2F5;
+	--el-fill-color-light: #F5F7FA;
+	--el-fill-color-lighter: var(--page-bg);
+	--el-fill-color-blank: var(--card-bg);
+	--el-border-radius-base: 8px;
+	--el-font-family: var(--font-family);
+	--el-box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+	--el-box-shadow-light: var(--shadow-card);
+
+	/* 服务树侧栏菜单（Element menu 专属变量） */
+	--menu-bg: var(--side-bg);
+	--menu-text: #45484c;
+	--menu-active: var(--brand);
+	--menu-hover: var(--hover-bg);
+}
+
+/* ============================================================
+   主题二「玄夜」xuanye（X 风纯黑）· data-theme + .dark
+   ============================================================ */
+html[data-theme='xuanye'] {
+	--brand: #1D9BF0;            // X 蓝
+	--brand-hover: #4DAEFF;
+	--brand-active: #1A8CD8;
+	--brand-050: rgba(29, 155, 240, 0.14);
+	--brand-100: rgba(29, 155, 240, 0.22);
+	--accent: #22D3EE;           // 亮青 · 光轨起点（Logo 副色）
+	--logo-star: #7FC4FF;        // Logo 星体 · 暗底提亮
+
+	--ok: #00BA7C;
+	--ok-bg: rgba(0, 186, 124, 0.12);
+	--warn: #FFD400;
+	--warn-bg: rgba(255, 212, 0, 0.10);
+	--danger: #F4212E;
+	--danger-bg: rgba(244, 33, 46, 0.12);
+
+	--page-bg: #000000;          // X 纯黑底
+	--side-bg: #000000;
+	--card-bg: #16181C;          // X 面板灰
+	--header-bg: rgba(0, 0, 0, 0.85);
+	--line: #2F3336;
+	--line-soft: #22262B;
+	--hover-bg: rgba(231, 233, 234, 0.08);
+
+	--ink: #E7E9EA;
+	--ink-mid: #71767B;
+	--ink-low: #536471;
+	--on-brand: #FFFFFF;
+
+	--banner-grad: linear-gradient(135deg, #0B1420 0%, #0D1424 45%, #131129 100%);
+	--banner-text: #E7E9EA;
+	--banner-sub: #8B98A5;
+	--login-grad: radial-gradient(900px 500px at 70% -10%, rgba(29, 155, 240, 0.25), transparent 60%), #000000;
+	--shadow-card: 0 1px 2px rgba(0, 0, 0, 0.6);
+	--shadow-card-hover: 0 6px 18px rgba(0, 0, 0, 0.7);
+	--glow: rgba(29, 155, 240, 0.4);
+
+	--el-color-primary: var(--brand);
+	--el-color-primary-light-3: #4daeff;
+	--el-color-primary-light-5: rgba(29, 155, 240, 0.55);
+	--el-color-primary-light-7: rgba(29, 155, 240, 0.35);
+	--el-color-primary-light-8: rgba(29, 155, 240, 0.25);
+	--el-color-primary-light-9: var(--brand-050);
+	--el-color-primary-dark-2: var(--brand-active);
+	--el-bg-color: var(--card-bg);
+	--el-bg-color-page: var(--page-bg);
+	--el-bg-color-overlay: #1C1F24;
+	--el-text-color-primary: var(--ink);
+	--el-text-color-regular: #D6DBE1;
+	--el-text-color-secondary: var(--ink-mid);
+	--el-border-color: var(--line);
+	--el-border-color-light: #2A2F35;
+	--el-border-color-lighter: var(--line-soft);
+	--el-border-color-extra-light: #1C1F24;
+	--el-fill-color: #1C1F24;
+	--el-fill-color-light: #16181C;
+	--el-fill-color-lighter: #101216;
+	--el-fill-color-blank: var(--card-bg);
+	--el-border-radius-base: 8px;
+	--el-box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
+	--el-box-shadow-light: var(--shadow-card);
+
+	--menu-bg: var(--side-bg);
+	--menu-text: #A8B0B8;
+	--menu-active: var(--brand);
+	--menu-hover: var(--hover-bg);
+}
+
+/* ============================================================
+   主题三「极光」aurora（V1 极光智维：浅底 + 深空渐变侧栏）
+   ============================================================ */
+html[data-theme='aurora'] {
+	--brand: #4C6FFF;            // 极光蓝
+	--brand-hover: #6E87FF;
+	--brand-active: #3B5BE8;
+	--brand-050: #EEF2FF;
+	--brand-100: #DDE6FF;
+	--accent: #22D3EE;           // 亮青 · 光轨起点（Logo 副色）
+	--logo-star: #8098FF;        // Logo 星体 · 深空侧栏上提亮
+	--logo-word: #17203A;        // Logo 字标字色 · 浅底（页面 / 卡片 / 白色顶栏）
+	--logo-word-inv: #EAF0FF;    // Logo 字标字色 · 深空侧栏 / 深色 Banner
+
+	--ok: #10B981;
+	--ok-bg: #E7F8F1;
+	--warn: #F59E0B;
+	--warn-bg: #FEF5E4;
+	--danger: #EF4444;
+	--danger-bg: #FDECEC;
+
+	--page-bg: #F7F9FF;          // 冷调浅底
+	--side-bg: #10173B;          // 深空侧栏（渐变无法用于 background-color，取深空色值）
+	--card-bg: #FFFFFF;
+	--header-bg: #FFFFFF;
+	--line: #E2E8F0;
+	--line-soft: #EEF2F9;
+	--hover-bg: #EEF2F9;
+
+	--ink: #1E293B;
+	--ink-mid: #64748B;
+	--ink-low: #94A3B8;
+	--on-brand: #FFFFFF;
+
+	--banner-grad: linear-gradient(135deg, #1E3A8A 0%, #4C6FFF 55%, #7C3AED 100%); // 极光渐变 Banner
+	--banner-text: #FFFFFF;
+	--banner-sub: rgba(255, 255, 255, 0.78);
+	--login-grad: linear-gradient(135deg, #1E3A8A 0%, #4C6FFF 50%, #6B21A8 100%);
+	--shadow-card: 0 1px 3px rgba(30, 41, 99, 0.08);
+	--shadow-card-hover: 0 8px 24px rgba(76, 111, 255, 0.18);
+	--glow: rgba(76, 111, 255, 0.4);
+
+	--el-color-primary: var(--brand);
+	--el-color-primary-light-3: #7c93ff;
+	--el-color-primary-light-5: #a5b7ff;
+	--el-color-primary-light-7: #cfdbff;
+	--el-color-primary-light-8: #dde6ff;
+	--el-color-primary-light-9: var(--brand-050);
+	--el-color-primary-dark-2: var(--brand-active);
+	--el-bg-color: var(--card-bg);
+	--el-bg-color-page: var(--page-bg);
+	--el-bg-color-overlay: var(--card-bg);
+	--el-text-color-primary: var(--ink);
+	--el-text-color-regular: #334155;
+	--el-text-color-secondary: var(--ink-mid);
+	--el-border-color: var(--line);
+	--el-border-color-light: #E8EDF6;
+	--el-border-color-lighter: var(--line-soft);
+	--el-border-color-extra-light: #F3F6FD;
+	--el-fill-color: #F1F4FB;
+	--el-fill-color-light: #F5F8FF;
+	--el-fill-color-lighter: var(--page-bg);
+	--el-fill-color-blank: var(--card-bg);
+	--el-border-radius-base: 8px;
+	--el-box-shadow: 0 8px 24px rgba(76, 111, 255, 0.18);
+	--el-box-shadow-light: var(--shadow-card);
+
+	/* 深空侧栏菜单 */
+	--menu-bg: var(--side-bg);
+	--menu-text: #BFCCDE;
+	--menu-active: #8FA8FF;
+	--menu-hover: rgba(143, 168, 255, 0.12);
+}
+
+/* ============================================================
+   主题四「曜黑」yahei（V2 曜黑塔台：全暗 + 琥珀金信号灯）
+   ============================================================ */
+html[data-theme='yahei'] {
+	--brand: #F5B841;            // 琥珀金
+	--brand-hover: #FFC964;
+	--brand-active: #D9A02F;
+	--brand-050: rgba(245, 184, 65, 0.13);
+	--brand-100: rgba(245, 184, 65, 0.22);
+	--accent: #FFD98A;           // 暖金 · 光轨起点（Logo 副色，跟随琥珀主色）
+	--logo-star: #FFC964;        // Logo 星体 · 与琥珀金激活态同源
+	--logo-word: #F5F1E8;        // Logo 字标字色 · 暖白，贴合琥珀金
+	--logo-word-inv: #F5F1E8;
+
+	--ok: #22C55E;
+	--ok-bg: rgba(34, 197, 94, 0.12);
+	--warn: #F5B841;
+	--warn-bg: rgba(245, 184, 65, 0.12);
+	--danger: #EF4444;
+	--danger-bg: rgba(239, 68, 68, 0.14);
+
+	--page-bg: #0A0E17;          // 曜黑底
+	--side-bg: #0D1220;          // 塔台侧栏
+	--card-bg: #141C2F;          // 曜黑面板
+	--header-bg: rgba(10, 14, 23, 0.92);
+	--line: #232C42;
+	--line-soft: #1A2236;
+	--hover-bg: rgba(148, 163, 184, 0.08);
+
+	--ink: #E6EAF2;
+	--ink-mid: #8B94A8;
+	--ink-low: #5A6376;
+	--on-brand: #1A1408;         // 琥珀底上用深墨字（对比度）
+
+	--banner-grad: linear-gradient(135deg, #0B1020 0%, #121A30 50%, #1A2242 100%);
+	--banner-text: #F2C063;
+	--banner-sub: #8B94A8;
+	--login-grad: radial-gradient(900px 500px at 70% -10%, rgba(245, 184, 65, 0.18), transparent 60%), #0A0E17;
+	--shadow-card: 0 1px 3px rgba(0, 0, 0, 0.55);
+	--shadow-card-hover: 0 8px 24px rgba(245, 184, 65, 0.12);
+	--glow: rgba(245, 184, 65, 0.35);
+
+	--el-color-primary: var(--brand);
+	--el-color-primary-light-3: #f7c76b;
+	--el-color-primary-light-5: rgba(245, 184, 65, 0.55);
+	--el-color-primary-light-7: rgba(245, 184, 65, 0.35);
+	--el-color-primary-light-8: rgba(245, 184, 65, 0.25);
+	--el-color-primary-light-9: var(--brand-050);
+	--el-color-primary-dark-2: var(--brand-active);
+	--el-bg-color: var(--card-bg);
+	--el-bg-color-page: var(--page-bg);
+	--el-bg-color-overlay: #182136;
+	--el-text-color-primary: var(--ink);
+	--el-text-color-regular: #C9D2E3;
+	--el-text-color-secondary: var(--ink-mid);
+	--el-border-color: var(--line);
+	--el-border-color-light: #1F2941;
+	--el-border-color-lighter: var(--line-soft);
+	--el-border-color-extra-light: #182136;
+	--el-fill-color: #182136;
+	--el-fill-color-light: #141C2F;
+	--el-fill-color-lighter: #0F1524;
+	--el-fill-color-blank: var(--card-bg);
+	--el-border-radius-base: 8px;
+	--el-box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+	--el-box-shadow-light: var(--shadow-card);
+
+	/* 塔台侧栏菜单 */
+	--menu-bg: var(--side-bg);
+	--menu-text: #8B94A8;
+	--menu-active: var(--brand);
+	--menu-hover: rgba(245, 184, 65, 0.10);
+}
