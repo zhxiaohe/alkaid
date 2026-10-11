@@ -2,7 +2,7 @@
 
 > AI 推理训练一体化运维平台 —— 让算法工程师一条龙完成「训练 → 模型产出 → 推理部署 → 上线运维」。
 
-Alkaid 构建在已有的 Kubernetes 集群、模型仓库与网关之上，专注做**编排、纳管与自助运维**层，不重复造底层。平台对 vLLM / SGLang 一视同仁，用 KEDA 做 LLM 场景弹性，用 Higress 提供 AI 网关与 KV-cache-aware 智能路由。
+Alkaid 构建在已有的 Kubernetes 集群、模型仓库与网关之上，专注做**编排、纳管与自助运维**层，不重复造底层。平台对 vLLM / SGLang 一视同仁，用 KEDA 做 LLM 场景弹性，用 Higress/LiteLLM 提供 AI 网关与 KV-cache-aware 智能路由。
 
 ## 核心特性
 
@@ -10,12 +10,26 @@ Alkaid 构建在已有的 Kubernetes 集群、模型仓库与网关之上，专�
 |---|---|
 | **推理部署** | 裸部署（Deployment + Service）+ 滚动更新 + 模型预热；对 vLLM / SGLang 统一支持 |
 | **弹性伸缩** | KEDA ScaledObject，以 `num_requests_waiting` / `kv_cache_usage_perc` 为信号；支持缩零 + cron 保 warm |
-| **AI 网关** | Higress 统一网关：ai-proxy、InferencePool + EPP 智能路由、灰度 canary、语义缓存、token 限流 |
+| **AI 网关** | Higress/LiteLLM 统一网关：ai-proxy、InferencePool + EPP 智能路由、灰度 canary、语义缓存、token 限流 |
 | **模型管理** | 模型元数据 + 版本状态机（staged / production / archived），权重存对象存储、平台只存元数据与路径 |
 | **训练任务** | 原生 Job + Volcano Gang 调度，LLaMA-Factory 微调，FSDP / FSDP2 并行 |
 | **实验追踪** | 自建 MLflow（MySQL backend + 对象存储 artifact），数据不出网 |
 | **基础能力** | 服务树、CMDB 动态建模、环境隔离、RBAC、终端与日志 |
 | **可观测性** | Prometheus + Grafana 指标看板（含 DCGM GPU 指标）、模板化报警、Pod 日志采集 |
+
+## 界面预览
+
+> 以下截图为**演示数据**（非真实生产数据），用于展示界面形态；更多截图见 [docs/images](docs/images)。
+
+| 门户首页 | 集群资源总览 |
+|---|---|
+| ![门户首页](docs/images/02-home.png) | ![集群资源总览](docs/images/03-cluster-overview.png) |
+| **推理服务列表** | **推理服务详情** |
+| ![推理服务列表](docs/images/07-inference-list.png) | ![推理服务详情](docs/images/08-inference-detail.png) |
+| **模型版本状态机** | **训练任务** |
+| ![模型版本状态机](docs/images/10-model-detail.png) | ![训练任务](docs/images/11-training-list.png) |
+| **AI 网关** | **模型体验** |
+| ![AI 网关](docs/images/12-gateway-list.png) | ![模型体验](docs/images/13-playground-text.png) |
 
 ## 架构
 
