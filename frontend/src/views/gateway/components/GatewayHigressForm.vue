@@ -13,6 +13,28 @@
 			<el-input v-model="spec.tls_secret" placeholder="同命名空间下的证书 Secret 名，留空则注册 HTTP 监听" />
 		</el-form-item>
 
+		<!--
+			数据面监听端口。Gateway 的 listener.port 不是「对外端口」，而是数据面监听端口，
+			Higress controller 会拿它去 higress-gateway Service 的端口列表里按值查找：
+			找不到就写 AddressNotAssigned，Gateway 恒为未就绪、入口地址为空，
+			路由即便下发成功也没有实际入口。故必须让用户显式声明、与装机端口对齐。
+		-->
+		<el-form-item label="数据面监听端口">
+			<el-input-number
+				v-model="spec.listen_port"
+				:min="0"
+				:max="65535"
+				controls-position="right"
+				placeholder="80"
+				style="width: 170px"
+			/>
+			<div class="form-tip">
+				必须与集群里 higress-gateway 这个 Service 暴露的端口一致（装 Higress 时改的 gateway.httpPort 就是它）。
+				留空或填 0 表示用默认 80。填错的典型症状是网关卡在「下发中」且入口地址为空——
+				controller 在 Service 上找不到该端口，Gateway 永远不就绪。
+			</div>
+		</el-form-item>
+
 		<el-form-item label="模型路由">
 			<div class="gw-block">
 				<div v-for="(r, i) in routes" :key="i" class="gw-row">

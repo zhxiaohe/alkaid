@@ -8,18 +8,23 @@ Alkaid 构建在已有的 Kubernetes 集群、模型仓库与网关之上，专�
 
 | 模块 | 能力 |
 |---|---|
-| **推理部署** | 裸部署（Deployment + Service）+ 滚动更新 + 模型预热；对 vLLM / SGLang 统一支持 |
-| **弹性伸缩** | KEDA ScaledObject，以 `num_requests_waiting` / `kv_cache_usage_perc` 为信号；支持缩零 + cron 保 warm |
-| **AI 网关** | Higress/LiteLLM 统一网关：ai-proxy、InferencePool + EPP 智能路由、灰度 canary、语义缓存、token 限流 |
+| **推理部署** | 裸部署（Deployment + Service）+ 滚动更新 + 模型预热；对 vLLM / SGLang 统一支持；原生集群支持HAMI调度 |
+| **弹性伸缩** | 静态手动扩缩容，动态基于KEDA弹性伸缩，定时缩零等功能|
+| **AI 网关** | Higress/LiteLLM 统一网关：ai-proxy、InferencePool + EPP 智能路由、语义缓存、token 限流 |
 | **模型管理** | 模型元数据 + 版本状态机（staged / production / archived），权重存对象存储、平台只存元数据与路径 |
 | **训练任务** | 原生 Job + Volcano Gang 调度，LLaMA-Factory 微调，FSDP / FSDP2 并行 |
 | **实验追踪** | 自建 MLflow（MySQL backend + 对象存储 artifact），数据不出网 |
 | **基础能力** | 服务树、CMDB 动态建模、环境隔离、RBAC、终端与日志 |
 | **可观测性** | Prometheus + Grafana 指标看板（含 DCGM GPU 指标）、模板化报警、Pod 日志采集 |
+| **模型体验** | 多模态（文本、图片、视频）推理体验 |
+| **kvcache(暂未实现)** | LMCache管理，作为 vLLM/SGLang 加速组件|
+| **调度管理(暂未实现)** | 混部调度，安全超卖、KV Cache调度器感知，拓扑感知|
+| **自动化运维(暂未实现)** | 故障自愈，慢节点、故障网卡、劣化磁盘，触发 Pod 漂移或节点下线|
+
 
 ## 界面预览
 
-> 以下截图为**演示数据**（非真实生产数据），用于展示界面形态；更多截图见 [docs/images](docs/images)。
+> 以下截图为**演示数据**，用于展示界面形态；更多截图见 [docs/images](docs/images)。
 
 | 门户首页 | 集群资源总览 |
 |---|---|
@@ -77,7 +82,7 @@ alkaid/
 │   │   ├── layout/      # 布局与侧边栏
 │   │   └── utils/       # 请求 / SSE / 工具
 │   └── package.json
-├── backend/             # Go 后端（迁入中）
+├── backend/             # Go 后端
 ├── LICENSE              # Apache-2.0
 └── README.md
 ```
@@ -119,6 +124,9 @@ npm run typecheck  # vue-tsc 类型检查
 ## 后端
 
 后端（Go + Gin）目前正在做开源前的配置脱敏与结构整理，稍后迁入 `backend/` 目录。迁入后本 README 会补齐后端的环境要求、配置项与启动方式。
+
+## 依赖组件安装
+K8S 集群中安装 Higress、KEDA、Volcano、Prometheus/Grafana、MLflow 等组件，安装方法请参考 [docs/INSTALL.md](docs/INSTALL.md)。
 
 ## 参与贡献
 

@@ -66,6 +66,9 @@ export interface RateLimit {
 export interface HigressSpec {
 	domain?: string;
 	tls_secret?: string;
+	// 数据面监听端口。留空/0 = 用默认 80。必须与集群里 higress-gateway Service
+	// 暴露的端口一致，否则 Gateway 会卡在 Programmed=False（入口地址为空）。
+	listen_port?: number;
 	model_routes?: ModelRoute[];
 	traffic_split?: TrafficSplit[];
 	rate_limit?: RateLimit;
@@ -112,6 +115,7 @@ export interface GatewayItem {
 	// 公共字段
 	namespace: string;
 	service_tree_id: number;
+	env_id?: number; // 后端列（环境隔离用），列表行会返回；前端只在调试时用到
 	created_at: string;
 	// M4 网关下发字段
 	provider?: GatewayProvider; // 空 = 一期旧记录（未指定驱动，不自动迁移）
@@ -173,3 +177,114 @@ export const deleteGateway = (name: string) => request.delete(`/gateway/${name}`
 // 驱动探测：该环境可用驱动 + 能力矩阵 + 安装/配置指引（前端驱动选择与字段显隐的唯一来源）
 export const getProvidersAvailable = (envId?: number) =>
 	request.get('/gateway/providers/available', { params: envId ? { env_id: envId } : undefined });
+
+// ── M4.3 下发链路（渲染 → SSA 下发 → 状态回读 → 显式回收）──────────────────────
+//
+// 一处必须记住的语义：**下发是按环境聚合的**。集群里 Higress 的 Gateway 实例是
+// 环境级物理单例，所以 `POST /gateway/:name/apply` 的 :name 只用来确定
+// 「哪个环境 + 哪个驱动」，实际收敛的是该环境该驱动下的**全部**网关记录。
+// 因此界面上的「下发」按钮放在任意一条记录上，效果对整个环境的入口生效——
+// 响应里的 records / skipped 就是用来把这条聚合边界摊开给用户看的。
+
+// 一个经网关对外暴露的服务（每服务一个路径前缀，见后端 render 注释的实测结论）
+export interface GatewayServiceEntry {
+	name: string;
+	namespace: string;
+	port: number;
+	path_prefix: string; // /svc/<服务名>
+	base_url: string; // /svc/<服务名>/v1 —— OpenAI SDK 的 base_url 就填这个
+	entry_url?: string; // 完整可访问地址（回读到入口地址时才有）
+}
+
+// 未参与本次收敛的记录及原因（未指定驱动的旧记录 / 另一驱动的记录）
+export interface GatewaySkipped {
+	name: string;
+	reason: string;
+}
+
+// GET /gateway/gateway-api/available：集群是否具备 Gateway API standard CRD（能否下发的硬前置）
+export interface GatewayApiAvailable {
+	available: boolean;
+	reason?: string;
+	// 平台实际连接的 API Server 地址（best-effort）：多集群环境下排"连错集群"的第一手证据
+	cluster_host?: string;
+	gateway?: string;
+	gateway_namespace?: string;
+	route_name?: string;
+	path_prefix_base?: string;
+}
+
+// GET /gateway/:name/manifest：只渲染不下发（下发前预览，也可用于与集群实际做 diff）
+export interface GatewayManifest {
+	env_code: string;
+	driver: GatewayProvider;
+	gateway: string;
+	gateway_namespace: string;
+	route_name: string;
+	records: string[];
+	skipped: GatewaySkipped[];
+	service_count: number;
+	services: GatewayServiceEntry[];
+	route_namespaces: string[];
+	listen_port: number; // 本次产物实际使用的数据面监听端口（留空 → 平台默认 80）
+	yaml: string;
+}
+
+// 下发/回收的共同响应形状（回收只填一部分字段）
+export interface GatewayDispatchResult {
+	applied?: boolean;
+	teardown?: boolean;
+	env_code: string;
+	driver: GatewayProvider;
+	gateway: string;
+	gateway_namespace: string;
+	listen_port?: number; // 环境级单例的数据面监听端口（0/缺省 → 平台默认 80）
+	trigger?: string;
+	records: string[];
+	skipped?: GatewaySkipped[];
+	service_count?: number;
+	services?: GatewayServiceEntry[];
+	route_namespaces?: string[];
+	dispatched?: string[];
+	pruned?: string[] | null;
+	endpoint?: string;
+	status?: string;
+	detail?: string;
+	renderer_version?: string;
+}
+
+// GET /gateway/:name/state：回读运行态（只读，不做纠偏写入）
+export interface GatewayStateResult {
+	env_code: string;
+	driver: GatewayProvider;
+	gateway: string;
+	gateway_namespace: string;
+	trigger: string;
+	records: string[];
+	status: string;
+	endpoint: string;
+	detail: string;
+	models?: string[];
+	keys?: string[];
+	drift?: string[];
+	service_count: number;
+	services: GatewayServiceEntry[];
+	route_namespaces: string[];
+}
+
+export const getGatewayApiAvailable = (envId?: number): Promise<GatewayApiAvailable> =>
+	request.get('/gateway/gateway-api/available', { params: envId ? { env_id: envId } : undefined });
+
+// 只渲染不下发：产物预览（不写 resolved_spec——那一列的语义是"最近一次已下发的快照"）
+export const previewGatewayManifest = (name: string): Promise<GatewayManifest> => request.get(`/gateway/${name}/manifest`);
+
+// 下发（幂等）。force=true 接管被其他 manager 占用的字段（首次迁移 / 字段所有权冲突救援）
+export const applyGateway = (name: string, force = false): Promise<GatewayDispatchResult> =>
+	request.post(`/gateway/${name}/apply`, { force });
+
+// 回读状态（服务端同时把状态与错误摘要落库，列表页据此显示）
+export const getGatewayState = (name: string): Promise<GatewayStateResult> => request.get(`/gateway/${name}/state`);
+
+// 显式回收集群入口。与「删除记录」严格区分：删记录只动库不动集群（可复活），
+// 只有本接口会真删集群对象——用于"删掉记录却在集群里留着入口"的清理
+export const teardownGateway = (name: string): Promise<GatewayDispatchResult> => request.post(`/gateway/${name}/teardown`);
